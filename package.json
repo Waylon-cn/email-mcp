@@ -1,0 +1,49 @@
+{
+  "name": "wechat-enterprise-email-mcp-server",
+  "version": "1.0.0",
+  "description": "微信企业邮箱发送MCP Server - 基于Model Context Protocol的企业邮箱服务",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node test-simple.js",
+    "test:mcp": "node test-mcp.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "wechat",
+    "enterprise-email",
+    "email-server",
+    "smtp",
+    "nodejs",
+    "claude-desktop"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/wechat-enterprise-email-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/wechat-enterprise-email-mcp-server/issues"
+  },
+  "homepage": "https://github.com/yourusername/wechat-enterprise-email-mcp-server#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "imap": "^0.8.19",
+    "mailparser": "^3.7.3",
+    "nodemailer": "^6.9.7",
+    "poplib": "^0.1.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/nodemailer": "^6.4.14"
+  }
+}
