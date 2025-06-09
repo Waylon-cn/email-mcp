@@ -23,28 +23,30 @@ const EMAIL_CONFIGS = {
     usePOP3: false
   },
   '163': {
-    name: '网易邮箱/企业邮箱',
+    name: '网易邮箱',
     domains: ['163.com', '126.com', 'yeah.net'],
     smtp: { host: 'smtp.163.com', port: 465, secure: true },
     imap: { host: 'imap.163.com', port: 993, secure: true },
     pop3: { host: 'pop.163.com', port: 995, secure: true },
     usePOP3: true // 163邮箱推荐使用POP3
   },
-  'netease-enterprise': {
-    name: '网易企业邮箱',
-    domains: [], // 企业域名不固定
-    smtp: { host: 'smtp.ym.163.com', port: 465, secure: true },
-    imap: { host: 'imap.ym.163.com', port: 993, secure: true },
-    pop3: { host: 'pop.ym.163.com', port: 995, secure: true },
-    usePOP3: true
-  },
+  // 'netease-enterprise': {
+  //   name: '网易企业邮箱',
+  //   domains: [], // 企业域名不固定
+  //   smtp: { host: 'smtphz.qiye.163.com', port: 587, secure: false }, // 使用587端口和STARTTLS
+  //   imap: { host: 'imaphz.qiye.163.com', port: 993, secure: true },
+  //   pop3: { host: 'pophz.qiye.163.com', port: 995, secure: true },
+  //   usePOP3: true // 网易企业邮箱推荐使用POP3
+  // },
   'gmail': {
     name: 'Gmail',
     domains: ['gmail.com', 'googlemail.com'],
-    smtp: { host: 'smtp.gmail.com', port: 587, secure: false },
+    smtp: { host: 'smtp.gmail.com', port: 587, secure: true }, // 从2025年5月1日起，需要OAuth认证
     imap: { host: 'imap.gmail.com', port: 993, secure: true },
     pop3: { host: 'pop.gmail.com', port: 995, secure: true },
-    usePOP3: false
+    usePOP3: false, // Gmail推荐使用IMAP
+    requiresOAuth: true, // 2025年5月1日后必须使用OAuth，不支持密码认证
+    note: '需要在Gmail设置中启用POP/IMAP，Google Workspace需要管理员启用'
   },
   'outlook': {
     name: 'Outlook/Hotmail',
@@ -258,7 +260,7 @@ class UniversalEmailMCPServer {
                 },
                 provider: {
                   type: 'string',
-                  enum: ['qq', '163', 'gmail', 'outlook', 'exmail', 'aliyun', 'sina', 'sohu'],
+                  enum: ['qq', '163', 'gmail', 'outlook', 'exmail', 'aliyun', 'sina', 'sohu'], // 暂时注释掉: 'netease-enterprise'
                   description: '邮箱提供商（可选，不填写则自动识别）'
                 }
               },

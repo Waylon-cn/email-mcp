@@ -1,37 +1,62 @@
 {
-  "name": "wechat-enterprise-email-mcp-server",
+  "name": "@timecyber/universal-email-mcp",
   "version": "1.0.0",
-  "description": "微信企业邮箱发送MCP Server - 基于Model Context Protocol的企业邮箱服务",
+  "description": "通用邮箱MCP服务器 - 支持QQ、163、Gmail（由于谷歌政策不支持OAuth2.0，所以无法使用）、Outlook、企业邮箱等多种邮箱服务商的自动配置和邮件发送功能",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "universal-email-mcp": "./index.js"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "test": "node test-simple.js",
-    "test:mcp": "node test-mcp.js"
+    "test": "node test-auto-config.js",
+    "test:all": "node test-auto-config.js",
+    "test:gmail": "node -e \"import('./test-auto-config.js').then(m => m.testGmailConfig().catch(console.error))\"",
+    "test:qq": "node -e \"import('./test-auto-config.js').then(m => m.testQQAutoConfig().catch(console.error))\"",
+    "test:163": "node -e \"import('./test-auto-config.js').then(m => m.testAutoConfig().catch(console.error))\"",
+    "publish-check": "node scripts/publish-check.js",
+    "prepublishOnly": "npm run publish-check"
   },
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "wechat",
-    "enterprise-email",
-    "email-server",
+    "email",
     "smtp",
+    "imap",
+    "qq-mail",
+    "163-mail", 
+    "gmail",
+    "outlook",
+    "enterprise-email",
+    "email-client",
+    "email-server",
+    "auto-config",
     "nodejs",
-    "claude-desktop"
+    "claude-desktop",
+    "universal-email"
   ],
-  "author": "Your Name",
+  "author": "Universal Email MCP Server Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/wechat-enterprise-email-mcp-server.git"
+    "url": "https://github.com/TimeCyber/email-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/wechat-enterprise-email-mcp-server/issues"
+    "url": "https://github.com/TimeCyber/email-mcp/issues"
   },
-  "homepage": "https://github.com/yourusername/wechat-enterprise-email-mcp-server#readme",
+  "homepage": "https://github.com/TimeCyber/email-mcp#readme",
   "engines": {
     "node": ">=16.0.0"
+  },
+  "files": [
+    "index.js",
+    "README.md",
+    "CONFIG_GUIDE.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.6.0",

@@ -1,6 +1,22 @@
-# 📧 邮箱 MCP Server
+# 📧 通用邮箱 MCP Server
 
-一个让AI轻松接管邮箱的MCP服务，基于 Model Context Protocol (MCP) 构建，支持在 MCP-X,Claude Desktop 等 MCP 客户端中使用。
+[![npm version](https://badge.fury.io/js/@timecyber%2Funiversal-email-mcp.svg)](https://badge.fury.io/js/@timecyber%2Funiversal-email-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/@timecyber/universal-email-mcp.svg)](https://www.npmjs.com/package/@timecyber/universal-email-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+一个让AI轻松接管邮箱的通用MCP服务器，基于 Model Context Protocol (MCP) 构建，支持在 MCP-X、Claude Desktop 等 MCP 客户端中使用。
+
+**支持多种邮箱服务商自动配置**：QQ邮箱、163邮箱、Gmail、Outlook、腾讯企业邮箱、网易企业邮箱、阿里云邮箱、新浪邮箱、搜狐邮箱等。
+
+## 📦 快速安装
+
+```bash
+# npm 安装
+npm install -g @timecyber/universal-email-mcp
+
+# 使用 npx 运行（推荐）
+npx @timecyber/universal-email-mcp
+```
 
 ## ✨ 功能特性
 
@@ -30,33 +46,78 @@
 
 ## 🚀 快速开始
 
-### 1. 安装依赖
+### 方式一：直接使用npm包（推荐）
+
+#### 1. 安装npm包
+
+```bash
+# 全局安装
+npm install -g @timecyber/universal-email-mcp
+
+# 或本地安装
+npm install @timecyber/universal-email-mcp
+```
+
+#### 2. 在MCP客户端中配置
+
+**MCP-X 配置示例：**
+```json
+{
+  "mcpServers": {
+    "universal-email": {
+      "command": "npx",
+      "args": ["@timecyber/universal-email-mcp"],
+      "env": {
+        "EMAIL_USER": "your-email@domain.com",
+        "EMAIL_PASSWORD": "your-password-or-auth-code",
+        "EMAIL_TYPE": "auto"
+      }
+    }
+  }
+}
+```
+
+**Claude Desktop 配置示例：**
+```json
+{
+  "mcpServers": {
+    "universal-email": {
+      "command": "npx",
+      "args": ["@timecyber/universal-email-mcp"],
+      "env": {
+        "EMAIL_USER": "your-email@domain.com",
+        "EMAIL_PASSWORD": "your-password-or-auth-code",
+        "EMAIL_TYPE": "auto"
+      }
+    }
+  }
+}
+```
+
+### 方式二：从源码安装
+
+#### 1. 克隆项目
+
+```bash
+git clone https://github.com/TimeCyber/email-mcp.git
+cd email-mcp
+```
+
+#### 2. 安装依赖
 
 ```bash
 npm install
 ```
 
-### 2. 配置腾讯企业邮箱
+#### 3. 配置 MCP 客户端（源码安装）
 
-#### 获取授权码
-1. 访问 [企业邮箱管理后台](https://exmail.qq.com/)
-2. 进入 **"设置"** → **"账户"** → **"客户端专用密码"**
-3. 生成 **客户端专用密码** (授权码)
-4. 进入 **"设置"** → **"收发信设置"** → **"设置方法"**
-5. 开启 **"POP/IMAP/SMTP服务"**
-
-### 3. 配置 MCP 客户端
-
-#### MCP-X 配置
-在 工具管理 中添加：
-
-**个人邮箱配置：**
+**MCP-X 配置：**
 ```json
 {
   "mcpServers": {
     "universal-email": {
       "command": "node",
-      "args": ["F:\\enterprise\\mail\\index.js"],
+      "args": ["F:\\path\\to\\email-mcp\\index.js"],
       "env": {
         "EMAIL_USER": "your-email@domain.com",
         "EMAIL_PASSWORD": "your-password-or-auth-code",
@@ -73,7 +134,7 @@ npm install
   "mcpServers": {
     "enterprise-email": {
       "command": "node",
-      "args": ["F:\\enterprise\\mail\\index.js"],
+      "args": ["F:\\path\\to\\email-mcp\\index.js"],
       "env": {
         "EMAIL_USER": "user@company.com",
         "EMAIL_PASSWORD": "your-enterprise-auth-code",
@@ -84,25 +145,40 @@ npm install
 }
 ```
 
-💡 **关键提示**: 企业邮箱必须设置 `EMAIL_TYPE` 字段！
-
-📖 **[CONFIG_GUIDE.md](./CONFIG_GUIDE.md)** - 完整配置指南，包含所有邮箱类型详细说明
-
-**重要**: 请将 `your-email@yourcompany.com` 和 `your-authorization-code` 替换为您的实际邮箱地址和授权码。
-
-#### 本地开发配置
-为了保护敏感信息，推荐使用本地配置文件：
-
-1. 复制 `mcp-x-config.json` 为 `mcp-x-config.local.json`
-2. 在本地文件中填入真实的邮箱账号和密码
-3. 本地配置文件已被 `.gitignore` 保护，不会被提交到版本控制
-
-### 4. 测试配置
+#### 4. 测试配置
 
 ```bash
 # 测试邮件配置是否成功
 node test-auto-config.js
 ```
+
+## 📧 邮箱配置指南
+
+### 获取授权码
+不同邮箱的授权码获取方式：
+
+**腾讯企业邮箱：**
+1. 访问 [企业邮箱管理后台](https://exmail.qq.com/)
+2. 进入 **"设置"** → **"账户"** → **"客户端专用密码"**
+3. 生成 **客户端专用密码** (授权码)
+4. 进入 **"设置"** → **"收发信设置"** → **"设置方法"**
+5. 开启 **"POP/IMAP/SMTP服务"**
+
+**QQ邮箱：**
+1. 登录QQ邮箱，进入**"设置"** → **"账户"**
+2. 开启**"POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务"**
+3. 生成授权码
+
+**163邮箱：**
+1. 登录163邮箱，进入**"设置"** → **"POP3/SMTP/IMAP"**
+2. 开启**"POP3/SMTP/IMAP服务"**
+3. 设置客户端授权密码
+
+💡 **关键提示**: 
+- 企业邮箱必须设置 `EMAIL_TYPE` 字段！
+- 个人邮箱可以使用 `EMAIL_TYPE: "auto"` 自动识别
+
+📖 **[CONFIG_GUIDE.md](./CONFIG_GUIDE.md)** - 完整配置指南，包含所有邮箱类型详细说明
 
 ## 🔧 MCP 工具说明
 
@@ -291,13 +367,15 @@ node test-auto-config.js
 |---------|------------|----------|------------|----------|----------|
 | QQ邮箱 | smtp.qq.com | 587 | imap.qq.com | 993 | IMAP |
 | 网易邮箱 | smtp.163.com | 465 | imap.163.com | 993 | POP3* |
-| Gmail | smtp.gmail.com | 587 | imap.gmail.com | 993 | IMAP |
+| Gmail* | smtp.gmail.com | 587 | imap.gmail.com | 993 | IMAP |
 | Outlook | smtp-mail.outlook.com | 587 | outlook.office365.com | 993 | IMAP |
 | 腾讯企业邮箱 | smtp.exmail.qq.com | 465 | imap.exmail.qq.com | 993 | IMAP |
-| 网易企业邮箱 | smtp.ym.163.com | 465 | imap.ym.163.com | 993 | POP3* |
+<!--- | 网易企业邮箱 | smtphz.qiye.163.com | 994 | imaphz.qiye.163.com | 993 | POP3* | --->
 | 阿里云邮箱 | smtp.mxhichina.com | 465 | imap.mxhichina.com | 993 | IMAP |
 
 ***网易邮箱（163/126/yeah）自动使用POP3协议以避免"Unsafe Login"错误**
+
+***Gmail特殊说明**: 从2025年5月1日起，Google Workspace账号不再支持"less secure apps"，必须使用OAuth认证。个人Gmail需要使用应用专用密码。详见[配置指南](CONFIG_GUIDE.md#gmail-详细配置教程)。**
 
 ### 🔧 自动配置特性
 

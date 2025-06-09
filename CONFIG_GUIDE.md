@@ -141,9 +141,11 @@
   "EMAIL_TYPE": "netease-enterprise"
 }
 ```
+<!--- 暂时注释掉网易企业邮箱配置
 - 邮箱地址: `user@enterprise.com`（企业域名）
-- 实际服务器: `smtp.ym.163.com`（网易企业邮箱）
+- 实际服务器: `smtphz.qiye.163.com`（网易企业邮箱）
 - 必须设置: `EMAIL_TYPE: "netease-enterprise"`
+--->
 
 ### 3. 复制到MCP-X或其他MCP客户端
 将配置内容复制到您的MCP-X或其他MCP客户端配置文件中。
@@ -152,6 +154,53 @@
 保存配置后重启MCP-X或其他MCP客户端应用。
 
 ## 🔑 获取授权码指南
+
+### Gmail 详细配置教程
+
+根据[Google官方文档](https://support.google.com/a/answer/105694)，Gmail配置需要特别注意OAuth认证要求：
+
+#### ⚠️ 重要提醒
+- **2025年5月1日后**: Google Workspace账号不再支持"less secure apps"
+- **必须使用OAuth**: 第三方邮件客户端必须支持OAuth认证
+- **不支持密码**: Microsoft Outlook和iOS/macOS邮件应用需要OAuth
+
+#### 1. 个人Gmail账号配置
+1. 登录Gmail，点击右上角设置图标 → "查看所有设置"
+2. 选择"转发和POP/IMAP"标签页
+3. 启用"IMAP访问"（推荐）或"POP下载"
+4. 前往[Google账户安全设置](https://myaccount.google.com/security)
+5. 启用"两步验证"（必需）
+6. 生成"应用专用密码"
+7. 使用应用专用密码进行邮件客户端认证
+
+#### 2. Google Workspace企业账号
+**管理员配置**:
+1. 登录Google Admin Console
+2. 转到"应用" → "Google Workspace" → "Gmail" → "最终用户访问"
+3. 启用"POP和IMAP访问"
+4. 可选择"允许所有邮件客户端"或"限制OAuth客户端"
+
+**支持的OAuth客户端ID**:
+- Apple iOS Mail: `450232826690-0rm6bs9d2fps9tifvk2oodh3tasd7vl7.apps.googleusercontent.com`
+- Apple Mac Mail: `946018238758-bi6ni53dfoddlgn97pk3b8i7nphige40.apps.googleusercontent.com`
+
+#### 3. Gmail服务器设置
+| 协议 | 服务器地址 | 端口 | 加密方式 |
+|------|------------|------|----------|
+| SMTP | smtp.gmail.com | 587 | TLS |
+| IMAP | imap.gmail.com | 993 | SSL |
+| POP3 | pop.gmail.com | 995 | SSL |
+
+#### 使用示例
+```json
+{
+  "EMAIL_USER": "username@gmail.com",
+  "EMAIL_PASSWORD": "your-app-specific-password",
+  "EMAIL_TYPE": "gmail"
+}
+```
+
+💡 **注意**: Gmail推荐使用IMAP协议，提供更好的同步体验。
 
 ### 网易邮箱 (163/126/yeah) 详细配置教程
 
