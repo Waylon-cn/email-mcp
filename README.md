@@ -106,9 +106,9 @@ node test-auto-config.js
 
 ## 🔧 MCP 工具说明
 
-### 1. `send_wechat_enterprise_email` - 发送邮件
+### 1. `send_email` - 发送邮件
 
-发送微信企业邮箱，支持多种格式和收件人。
+发送邮件，支持多种格式和收件人。
 
 #### 参数
 - **`to`** (必需): 收件人邮箱地址数组
@@ -154,38 +154,84 @@ node test-auto-config.js
     },
     {
       "filename": "data.txt",
-      "content": "SGVsbG8gV29ybGQ=",
-      "encoding": "base64"
+      "content": "SGVsbG8gV29ybGQ="
     }
   ]
 }
 ```
 
-### 2. `configure_wechat_email_server` - 配置服务器
+### 2. `get_recent_emails` - 获取最近邮件
 
-动态配置微信企业邮箱服务器设置。
+获取最近几天的邮件列表，自动选择最佳协议（IMAP/POP3）。
 
 #### 参数
-- **`user`** (必需): 发送邮箱账号
-- **`password`** (必需): 邮箱密码或授权码
-- **`host`** (可选): SMTP服务器地址，默认 `smtp.exmail.qq.com`
-- **`port`** (可选): SMTP端口，默认 `465`
-- **`secure`** (可选): 是否使用SSL，默认 `true`
+- **`limit`** (可选): 返回邮件数量限制，默认20
+- **`days`** (可选): 获取最近几天的邮件，默认3天
 
 #### 使用示例
 ```json
 {
-  "user": "your-email@company.com",
-  "password": "your-authorization-code",
-  "host": "smtp.exmail.qq.com",
-  "port": 465,
-  "secure": true
+  "limit": 10,
+  "days": 7
 }
 ```
 
-### 3. `test_email_connection` - 测试连接
+### 3. `get_email_content` - 获取邮件内容
 
-测试微信企业邮箱SMTP服务器连接状态。
+获取指定邮件的详细内容。
+
+#### 参数
+- **`uid`** (必需): 邮件唯一标识符（从邮件列表中获取）
+
+#### 使用示例
+```json
+{
+  "uid": "12345"
+}
+```
+
+### 4. `setup_email_account` - 设置邮箱账号
+
+自动识别邮箱类型并配置服务器，支持8大邮箱服务商。
+
+#### 参数
+- **`email`** (必需): 邮箱地址
+- **`password`** (必需): 邮箱密码或授权码
+- **`provider`** (可选): 邮箱提供商（手动指定，用于企业邮箱）
+
+#### 支持的邮箱类型
+- `qq` - QQ邮箱
+- `163` - 网易邮箱
+- `gmail` - Gmail
+- `outlook` - Outlook/Hotmail
+- `exmail` - 腾讯企业邮箱
+- `netease-enterprise` - 网易企业邮箱
+- `aliyun` - 阿里云邮箱
+- `sina` - 新浪邮箱
+- `sohu` - 搜狐邮箱
+
+#### 使用示例
+
+**个人邮箱（自动识别）：**
+```json
+{
+  "email": "user@qq.com",
+  "password": "your-auth-code"
+}
+```
+
+**企业邮箱（手动指定）：**
+```json
+{
+  "email": "user@company.com",
+  "password": "your-enterprise-auth-code",
+  "provider": "exmail"
+}
+```
+
+### 5. `list_supported_providers` - 列出支持的邮箱
+
+查看所有支持的邮箱服务商及其配置信息。
 
 #### 参数
 无需参数
@@ -195,17 +241,70 @@ node test-auto-config.js
 {}
 ```
 
-## 📊 SMTP 配置说明
+### 6. `configure_email_server` - 手动配置服务器
 
-### 微信企业邮箱官方配置
+手动配置邮箱服务器设置（高级用户使用）。
 
-| 协议 | 服务器地址 | 端口 | 加密方式 | 认证 |
-|------|------------|------|----------|------|
-| SMTP | smtp.exmail.qq.com | 465 | SSL/TLS | 是 |
-| SMTP | smtp.exmail.qq.com | 587 | STARTTLS | 是 |
-| SMTP | smtp.exmail.qq.com | 25 | STARTTLS | 是 |
+#### 参数
+- **`user`** (必需): 邮箱账号
+- **`password`** (必需): 邮箱密码或授权码
+- **`smtpHost`** (可选): SMTP服务器地址
+- **`smtpPort`** (可选): SMTP端口
+- **`smtpSecure`** (可选): 是否使用SSL
+- **`imapHost`** (可选): IMAP服务器地址
+- **`imapPort`** (可选): IMAP端口
+- **`imapSecure`** (可选): 是否使用SSL
 
-**推荐配置**: 使用 **465端口 + SSL/TLS** 加密
+#### 使用示例
+```json
+{
+  "user": "your-email@domain.com",
+  "password": "your-password",
+  "smtpHost": "smtp.domain.com",
+  "smtpPort": 465,
+  "smtpSecure": true
+}
+```
+
+### 7. `test_email_connection` - 测试连接
+
+测试邮箱服务器连接状态。
+
+#### 参数
+- **`testType`** (可选): 测试类型
+  - `smtp` - 仅测试发送服务器
+  - `imap` - 仅测试接收服务器
+  - `both` - 测试全部（默认）
+
+#### 使用示例
+```json
+{
+  "testType": "smtp"
+}
+```
+
+## 📊 支持的邮箱服务商
+
+### 主流邮箱服务器配置
+
+| 邮箱类型 | SMTP服务器 | SMTP端口 | IMAP服务器 | IMAP端口 | 推荐协议 |
+|---------|------------|----------|------------|----------|----------|
+| QQ邮箱 | smtp.qq.com | 587 | imap.qq.com | 993 | IMAP |
+| 网易邮箱 | smtp.163.com | 465 | imap.163.com | 993 | POP3* |
+| Gmail | smtp.gmail.com | 587 | imap.gmail.com | 993 | IMAP |
+| Outlook | smtp-mail.outlook.com | 587 | outlook.office365.com | 993 | IMAP |
+| 腾讯企业邮箱 | smtp.exmail.qq.com | 465 | imap.exmail.qq.com | 993 | IMAP |
+| 网易企业邮箱 | smtp.ym.163.com | 465 | imap.ym.163.com | 993 | POP3* |
+| 阿里云邮箱 | smtp.mxhichina.com | 465 | imap.mxhichina.com | 993 | IMAP |
+
+***网易邮箱（163/126/yeah）自动使用POP3协议以避免"Unsafe Login"错误**
+
+### 🔧 自动配置特性
+
+- ✅ **智能识别**: 根据邮箱域名自动选择服务器配置
+- ✅ **协议优化**: 163邮箱自动使用POP3，其他使用IMAP
+- ✅ **企业邮箱**: 支持通过 `EMAIL_TYPE` 字段手动指定
+- ✅ **错误处理**: IMAP失败时自动尝试POP3协议
 
 ## 🔍 故障排除
 
@@ -214,48 +313,78 @@ node test-auto-config.js
 #### 1. `535 Error: authentication failed`
 **原因**: 认证失败
 **解决方案**:
-- 确认已在企业邮箱管理后台开启SMTP服务
-- 重新生成授权码
-- 检查用户名和授权码是否正确
-- 确认企业管理员已允许SMTP访问
+- 确认已在邮箱设置中开启SMTP/IMAP/POP3服务
+- 重新生成授权码或应用专用密码
+- 检查邮箱地址和授权码是否正确
+- 对于企业邮箱，确认管理员已允许第三方访问
 
-#### 2. `ECONNREFUSED` 或连接超时
+#### 2. `[IMAP] EXAMINE Unsafe Login` (网易邮箱常见)
+**原因**: 网易邮箱安全限制
+**解决方案**:
+- 系统会自动切换到POP3协议
+- 确认已在网易邮箱中开启POP3/SMTP服务
+- 使用最新生成的16位授权码
+
+#### 3. `ECONNREFUSED` 或连接超时
 **原因**: 网络连接问题
 **解决方案**:
-- 检查网络连接
-- 确认防火墙没有阻挡SMTP端口 (25, 465, 587)
-- 尝试不同的网络环境
+- 检查网络连接状态
+- 确认防火墙没有阻挡邮件端口 (25, 465, 587, 993, 995)
+- 尝试不同的网络环境或VPN
 
-#### 3. `ETIMEDOUT`
-**原因**: 连接超时
+#### 4. `EMAIL_TYPE` 相关错误
+**原因**: 企业邮箱域名和服务器不匹配
 **解决方案**:
-- 检查网络稳定性
-- 尝试其他SMTP端口
-- 增加超时时间配置
+- 为企业邮箱设置正确的 `EMAIL_TYPE` 字段
+- 腾讯企业邮箱设置为 `"exmail"`
+- 网易企业邮箱设置为 `"netease-enterprise"`
 
-### 调试模式
+### 📋 诊断工具
 
-启用调试模式查看详细日志：
+使用内置诊断命令：
 
-```javascript
-// 在配置中添加
-debug: true,
-logger: console
+```bash
+# 测试邮箱配置
+node test-auto-config.js
+
+# 测试EMAIL_TYPE功能
+node test-email-type.js
+
+# 使用MCP工具测试连接
+# 在MCP客户端中调用 test_email_connection
 ```
+
+### 🔧 调试技巧
+
+1. **查看详细日志**: 系统会自动输出配置和连接信息
+2. **使用测试工具**: 通过 `test_email_connection` 诊断问题
+3. **检查邮箱类型**: 使用 `list_supported_providers` 确认支持
+4. **逐步配置**: 先使用 `setup_email_account` 自动配置
 
 ## 📁 项目结构
 
 ```
-├── index.js                    # MCP Server主程序
-├── package.json               # 项目依赖配置
-├── claude-desktop-config.json # Claude Desktop配置示例
-├── mcp-config.json           # 通用MCP配置示例
-├── config-template.env       # 环境变量模板
-├── test-mcp-server.js       # MCP Server测试脚本
-├── wait-and-retry.js        # 等待重试测试脚本
-├── diagnose-wechat-email.js # 邮箱诊断脚本
-└── README.md                # 项目文档
+├── index.js                     # MCP Server主程序
+├── package.json                # 项目依赖配置
+├── README.md                   # 项目主文档
+├── CONFIG_GUIDE.md            # 详细配置指南
+├── .gitignore                 # Git忽略文件
+├── 📁 配置模板/
+│   ├── mcp-x_config_v2.json      # 通用配置模板
+│   └── mcp-x_config_multi.json   # 多账户配置
+├── 📁 测试工具/
+│   ├── test-auto-config.js       # 自动配置测试
+│   └── test-email-type.js        # EMAIL_TYPE功能测试
+└── LICENSE                     # 开源许可证
 ```
+
+### 🔑 核心文件说明
+
+- **`index.js`** - 主要的MCP服务器程序，包含所有邮件功能
+- **`CONFIG_GUIDE.md`** - 详细的配置指南，包含各种邮箱配置说明
+- **`mcp-x_config_v2.json`** - 通用配置模板，支持EMAIL_TYPE字段
+- **`test-auto-config.js`** - 测试自动配置功能的脚本
+- **`test-email-type.js`** - 验证EMAIL_TYPE字段功能的测试脚本
 
 ## 🔐 安全注意事项
 
@@ -266,26 +395,52 @@ logger: console
 
 ## 📞 技术支持
 
-### 获取帮助
-- 📚 [微信企业邮箱官方文档](https://open.work.weixin.qq.com/help2/pc/19886)
-- 🌐 [企业邮箱管理后台](https://exmail.qq.com/)
-- 💬 联系企业邮箱管理员
+### 📖 文档资源
+- 📋 **[CONFIG_GUIDE.md](./CONFIG_GUIDE.md)** - 完整配置指南
+- 🔧 **测试工具** - 使用 `test-auto-config.js` 和 `test-email-type.js`
+- 🛠️ **内置诊断** - 使用 `test_email_connection` 工具
 
-### 贡献代码
-欢迎提交 Issue 和 Pull Request 来改进这个项目。
+### 🌐 官方文档
+- [网易邮箱客户端设置](https://help.mail.163.com/faqDetail.do?code=d7a5dc8471cd0c0e8b4b8f4f8e49998b374173cfe9171305fa1ce630d7f67ac2a5feb28b66796d3b)
+- [腾讯企业邮箱配置](https://open.work.weixin.qq.com/help2/pc/19886?person_id=1)
+- [QQ邮箱帮助中心](https://kf.qq.com/product/tx_mail.html)
+- [Gmail设置指南](https://support.google.com/mail/answer/7126229)
+
+### 🤝 贡献指南
+欢迎提交 Issue 和 Pull Request 来改进这个项目！
+
+- 🐛 **报告Bug**: 请详细描述问题和复现步骤
+- 💡 **功能建议**: 欢迎提出新的邮箱支持需求
+- 📝 **文档改进**: 帮助完善使用文档
+
+### 📊 项目状态
+- ✅ **生产就绪**: 支持8大主流邮箱服务商
+- 🔄 **持续更新**: 根据用户反馈不断改进
+- 🛡️ **安全保障**: 支持SSL/TLS加密和授权码认证
 
 ## 📄 许可证
 
-MIT License
+MIT License - 详见 [LICENSE](./LICENSE) 文件
 
 ---
 
 ## 🎉 快速测试
 
-配置完成后，可以在MCP客户端中发送测试邮件：
+配置完成后，可以在MCP客户端中测试功能：
 
+**发送测试邮件：**
 ```
-请发送一封测试邮件到 test@example.com，主题为"MCP测试邮件"，内容为"Hello from MCP Server!"
+请发送一封测试邮件到 test@example.com，主题为"MCP测试邮件"，内容为"Hello from Universal Email MCP!"
 ```
 
-如果配置正确，邮件应该能够成功发送！ 
+**获取邮件列表：**
+```
+请获取最近3天的邮件列表，限制10封邮件
+```
+
+**测试连接：**
+```
+请测试邮箱连接状态
+```
+
+如果一切配置正确，所有功能都应该正常工作！🚀 
