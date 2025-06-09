@@ -1,7 +1,7 @@
 # 📧 通用邮箱 MCP Server
 
-[![npm version](https://badge.fury.io/js/@timecyber%2Funiversal-email-mcp.svg)](https://badge.fury.io/js/@timecyber%2Funiversal-email-mcp)
-[![npm downloads](https://img.shields.io/npm/dm/@timecyber/universal-email-mcp.svg)](https://www.npmjs.com/package/@timecyber/universal-email-mcp)
+[![npm version](https://badge.fury.io/js/mcp-email.svg)](https://badge.fury.io/js/mcp-email)
+[![npm downloads](https://img.shields.io/npm/dm/mcp-email.svg)](https://www.npmjs.com/package/mcp-email)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 一个让AI轻松接管邮箱的通用MCP服务器，基于 Model Context Protocol (MCP) 构建，支持在 MCP-X、Claude Desktop 等 MCP 客户端中使用。
@@ -12,10 +12,10 @@
 
 ```bash
 # npm 安装
-npm install -g @timecyber/universal-email-mcp
+npm install -g mcp-email
 
 # 使用 npx 运行（推荐）
-npx @timecyber/universal-email-mcp
+npx mcp-email
 ```
 
 ## ✨ 功能特性
@@ -52,10 +52,10 @@ npx @timecyber/universal-email-mcp
 
 ```bash
 # 全局安装
-npm install -g @timecyber/universal-email-mcp
+npm install -g mcp-email
 
 # 或本地安装
-npm install @timecyber/universal-email-mcp
+npm install mcp-email
 ```
 
 #### 2. 在MCP客户端中配置
@@ -66,24 +66,7 @@ npm install @timecyber/universal-email-mcp
   "mcpServers": {
     "universal-email": {
       "command": "npx",
-      "args": ["@timecyber/universal-email-mcp"],
-      "env": {
-        "EMAIL_USER": "your-email@domain.com",
-        "EMAIL_PASSWORD": "your-password-or-auth-code",
-        "EMAIL_TYPE": "auto"
-      }
-    }
-  }
-}
-```
-
-**Claude Desktop 配置示例：**
-```json
-{
-  "mcpServers": {
-    "universal-email": {
-      "command": "npx",
-      "args": ["@timecyber/universal-email-mcp"],
+      "args": ["mcp-email"],
       "env": {
         "EMAIL_USER": "your-email@domain.com",
         "EMAIL_PASSWORD": "your-password-or-auth-code",
