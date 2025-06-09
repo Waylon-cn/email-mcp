@@ -1,6 +1,6 @@
-# 📧 微信企业邮箱 MCP Server
+# 📧 邮箱 MCP Server
 
-一个功能完整的微信企业邮箱发送服务，基于 Model Context Protocol (MCP) 构建，支持在 Claude Desktop 等 MCP 客户端中使用。
+一个让AI轻松接管邮箱的MCP服务，基于 Model Context Protocol (MCP) 构建，支持在 MCP-X,Claude Desktop 等 MCP 客户端中使用。
 
 ## ✨ 功能特性
 
@@ -25,7 +25,7 @@
 ## 📋 系统要求
 
 - Node.js 16.x 或更高版本
-- 微信企业邮箱账号
+- 邮箱账号
 - MCP 客户端 (如 Claude Desktop)
 
 ## 🚀 快速开始
