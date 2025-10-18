@@ -5,7 +5,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: waylon-cn/email-mcp/email-mcp
+  IMAGE_NAME: waylon-cn/email-mcp/email-mcp2
 
 jobs:
   build:
