@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/dist/server/streamableHttp.js';
+import express from 'express';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import nodemailer from 'nodemailer';
 import Imap from 'imap';
@@ -1147,8 +1148,20 @@ class UniversalEmailMCPServer {
 // 导出类供测试使用
 export { UniversalEmailMCPServer };
 
-// 如果直接运行此文件，启动服务器
-if (import.meta.url.endsWith(process.argv[1]) || import.meta.url.includes('index.js')) {
-  const server = new UniversalEmailMCPServer();
-  server.run().catch(console.error);
-} 
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(express.json());
+
+const server = new UniversalEmailMCPServer();
+
+const transport = new StreamableHTTPServerTransport(server.server, {
+  path: '/mcp',
+  expressApp: app,
+});
+
+transport.listen();
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server listening on port ${port}`);
+});
