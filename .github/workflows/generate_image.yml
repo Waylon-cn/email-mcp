@@ -39,7 +39,7 @@ jobs:
         push: true
         pull: true
         platforms: linux/amd64
-        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v1.6
+        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v1.7
         provenance: true
         cache-from: type=gha
         cache-to: type=gha,mode=max

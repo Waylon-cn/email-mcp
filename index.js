@@ -1155,13 +1155,23 @@ app.use(express.json());
 
 const server = new UniversalEmailMCPServer();
 
-const transport = new StreamableHTTPServerTransport(server.server, {
-  path: '/mcp',
-  expressApp: app,
-});
+// 设置 MCP HTTP 端点
+app.post('/mcp', async (req, res) => {
+  // 为每个请求创建新的传输实例以防止请求ID冲突
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined,
+    enableJsonResponse: true
+  });
 
-transport.listen();
+  res.on('close', () => {
+    transport.close();
+  });
+
+  await server.server.connect(transport);
+  await transport.handleRequest(req, res, req.body);
+});
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server listening on port ${port}`);
+  console.log(`MCP endpoint available at http://localhost:${port}/mcp`);
 });
