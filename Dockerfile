@@ -13,6 +13,7 @@ ENV EMAIL_TYPE="auto"
 COPY package*.json ./
 
 # Install project dependencies
+RUN rm -f package-lock.json && npm cache clean --force
 RUN npm install
 
 # Copy the rest of the application code to the working directory
